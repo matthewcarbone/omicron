@@ -6,7 +6,8 @@ __email__ = "x94carbone@gmail.com"
 __status__ = "Prototype"
 
 
-from test.core_test import TestGaussian
+from test import core_test
 
 if __name__ == '__main__':
-    TestGaussian()
+    core_test.TestGaussian()
+    core_test.TestLorentzian()
