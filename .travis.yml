@@ -6,6 +6,8 @@ notifications:
       - x94carbone@gmail.com
     on_success: never
     on_failure: always
+install:
+  - pip install coveralls
 python:
   - '3.6'
 script:
