@@ -7,7 +7,6 @@ __status__ = "Prototype"
 
 
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 def gaussian(x, m, s, a=None):
