@@ -7,7 +7,24 @@ __status__ = "Prototype"
 
 import numpy as np
 
-from omicron.core.functions import gaussian, lorentzian
+from omicron.core.functions import gaussian, lorentzian, gaussian_tensor
+
+
+class TestGaussianTensor:
+
+    def __init__(self):
+        N = 10000
+        self.x = np.linspace(-5, 5, N)
+        dx = self.x[1] - self.x[0]
+
+        axes = [5, 10]
+        self.t = gaussian_tensor(self.x, axes, [-0.5, 0.5], [0.1, 1.0],
+                                 [0.0001, 1.0], normalize=True)
+        np.testing.assert_equal(self.t.shape[0], N)
+        np.testing.assert_equal(self.t.shape[1], axes[0])
+
+        for ii in range(self.t.shape[1]):
+            np.testing.assert_almost_equal(np.sum(self.t[:, ii]) * dx, 1.0)
 
 
 class TestGaussian:
