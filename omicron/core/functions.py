@@ -58,6 +58,11 @@ def gaussian_tensor(x, axes, m, s, a, normalize=True):
     normalize : bool
         If true, will normalize final function, else the distribution will not
         be normalize. Default is True.
+
+    Returns
+    -------
+    Matrix of shape len(x) x axes[0] in which the third axis was summed over
+    and normalized, if desired.
     """
 
     np.testing.assert_equal(len(axes), 2)
