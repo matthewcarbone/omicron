@@ -8,11 +8,30 @@ __status__ = "Prototype"
 import numpy as np
 import matplotlib.pyplot as plt
 
-from omicron.core.functions import gaussian, lorentzian, gaussian_tensor
+from omicron.core.functions import gaussian, lorentzian, gaussian_tensor, \
+    single_gaussian_from_params
 from omicron.core.core import GaussianGenerator
 
 
 VERBOSE = False
+
+
+class Test_single_gaussian_from_params:
+
+    grid_limits = [[-0.5, 0.5], [0.1, 1.0], [0.1, 1.0]]
+
+    def __init__(self, plot=VERBOSE):
+        self.g = GaussianGenerator(
+            [-10, 10], 1000, 100, 10,
+            TestGaussianGenerator.grid_limits, normalize=True)
+        if VERBOSE:
+            self.g.print_info()
+
+        rg = self.g.get_random_gaussian()
+        g = rg[0]  # random gaussian function
+        rg_mean, rg_std, rg_amp = rg[1], rg[2], rg[3]
+        _rg = single_gaussian_from_params(self.g.grid, rg_mean, rg_std, rg_amp)
+        np.testing.assert_array_almost_equal(g, _rg)
 
 
 class TestGaussianGenerator:

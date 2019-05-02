@@ -13,3 +13,4 @@ if __name__ == '__main__':
     core_test.TestLorentzian()
     core_test.TestGaussianTensor()
     core_test.TestGaussianGenerator()
+    core_test.Test_single_gaussian_from_params()

@@ -72,7 +72,8 @@ class GaussianGenerator:
 
     def get_random_gaussian(self):
         ii = np.random.randint(low=0, high=self.gtensor.shape[1] - 1)
-        return self.gtensor[:, ii], self.g_params[0, ii], self.g_params[1, ii]
+        return self.gtensor[:, ii], self.g_params[0, ii], \
+            self.g_params[1, ii], self.g_params[2, ii]
 
     def generate_stats(self, *args):
         """Make the statistics dictionary."""

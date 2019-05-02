@@ -34,15 +34,16 @@ def gaussian(x, m, s, a=None):
     return a * np.exp(-(x - m)**2 / 2.0 / s**2)
 
 
-def single_normalized_gaussian_from_params(x, m, s):
-    """Gaussian function 1 / sqrt(2 * pi) / s * exp(-(x - m)**2 / 2 / s**2)"""
+def single_gaussian_from_params(x, m, s, a):
+    """Gaussian function a * exp(-(x - m)**2 / 2 / s**2)"""
 
     n = len(x)
     x = x.reshape(n, 1)
     m = m.reshape(1, *m.shape)
     s = s.reshape(1, *m.shape)
+    a = a.reshape(1, *m.shape)
 
-    return np.sum(gaussian(x, m, s), axis=-1)
+    return np.sum(gaussian(x, m, s, a=a), axis=-1).squeeze()
 
 
 def gaussian_tensor(x, axes, m, s, a, normalize=True):
