@@ -16,12 +16,12 @@ from omicron.core.core import GaussianGenerator
 VERBOSE = False
 
 
-def initialize_gaussian_from_GaussianGenerator(grid_limits=[-10, 10],
+def initialize_gaussian_from_GaussianGenerator(grid_limits=(-10, 10),
                                                n_grid=1000, n_gauss=100,
                                                gauss_per_sample=10,
-                                               param_limits=[[-0.5, 0.5],
-                                                             [0.1, 1.0],
-                                                             [0.1, 1.0]],
+                                               param_limits=((-0.5, 0.5),
+                                                             (0.1, 1.0),
+                                                             (0.1, 1.0)),
                                                normalize=True):
     g = GaussianGenerator(grid_limits, n_grid, n_gauss, gauss_per_sample,
                           param_limits, normalize=normalize)
