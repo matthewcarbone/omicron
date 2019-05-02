@@ -12,19 +12,25 @@ from omicron.core.functions import gaussian, lorentzian, gaussian_tensor
 from omicron.core.core import GaussianGenerator
 
 
+VERBOSE = False
+
+
 class TestGaussianGenerator:
 
     grid_limits = [[-0.5, 0.5], [0.1, 1.0], [0.1, 1.0]]
 
-    def __init__(self, plot=False):
+    def __init__(self, plot=VERBOSE):
         self.g = GaussianGenerator(
             [-10, 10], 1000, 100, 10,
             TestGaussianGenerator.grid_limits, normalize=True)
-        self.g.print_info()
+        if VERBOSE:
+            self.g.print_info()
+
         self.g = GaussianGenerator(
             [-10, 10], 1000, 100, 10,
             TestGaussianGenerator.grid_limits, normalize=False)
-        self.g.print_info()
+        if VERBOSE:
+            self.g.print_info()
 
         try:
             self.g = GaussianGenerator(
@@ -41,7 +47,8 @@ class TestGaussianGenerator:
             special_grid_limits,
             grid_override=np.linspace(-10, 10, 1000, endpoint=True),
             normalize=True)
-        self.g.print_info()
+        if VERBOSE:
+            self.g.print_info()
 
         rg = self.g.get_random_gaussian()
         if plot:
