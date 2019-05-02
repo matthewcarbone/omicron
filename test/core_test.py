@@ -16,16 +16,25 @@ from omicron.core.core import GaussianGenerator
 VERBOSE = False
 
 
+def initialize_gaussian_from_GaussianGenerator(grid_limits=[-10, 10],
+                                               n_grid=1000, n_gauss=100,
+                                               gauss_per_sample=10,
+                                               param_limits=[[-0.5, 0.5],
+                                                             [0.1, 1.0],
+                                                             [0.1, 1.0]],
+                                               normalize=True):
+    g = GaussianGenerator(grid_limits, n_grid, n_gauss, gauss_per_sample,
+                          param_limits, normalize=normalize)
+    if VERBOSE:
+        g.print_info()
+
+
 class Test_single_gaussian_from_params:
 
-    grid_limits = [[-0.5, 0.5], [0.1, 1.0], [0.1, 1.0]]
+    param_limits = [[-0.5, 0.5], [0.1, 1.0], [0.1, 1.0]]
 
     def __init__(self, plot=VERBOSE):
-        self.g = GaussianGenerator(
-            [-10, 10], 1000, 100, 10,
-            TestGaussianGenerator.grid_limits, normalize=True)
-        if VERBOSE:
-            self.g.print_info()
+        self.g = initialize_gaussian_from_GaussianGenerator()
 
         rg = self.g.get_random_gaussian()
         g = rg[0]  # random gaussian function
@@ -36,34 +45,30 @@ class Test_single_gaussian_from_params:
 
 class TestGaussianGenerator:
 
-    grid_limits = [[-0.5, 0.5], [0.1, 1.0], [0.1, 1.0]]
+    param_limits = [[-0.5, 0.5], [0.1, 1.0], [0.1, 1.0]]
 
     def __init__(self, plot=VERBOSE):
-        self.g = GaussianGenerator(
-            [-10, 10], 1000, 100, 10,
-            TestGaussianGenerator.grid_limits, normalize=True)
-        if VERBOSE:
-            self.g.print_info()
+        self.g = initialize_gaussian_from_GaussianGenerator()
 
         self.g = GaussianGenerator(
             [-10, 10], 1000, 100, 10,
-            TestGaussianGenerator.grid_limits, normalize=False)
+            TestGaussianGenerator.param_limits, normalize=False)
         if VERBOSE:
             self.g.print_info()
 
         try:
             self.g = GaussianGenerator(
                 None, 1000, 100, 10,
-                TestGaussianGenerator.grid_limits, grid_override=None,
+                TestGaussianGenerator.param_limits, grid_override=None,
                 normalize=False)
         except RuntimeError:
             pass
 
-        special_grid_limits = [[-4, 4], [0.01, 1.0], [0.1, 1.0]]
+        special_param_limits = [[-4, 4], [0.01, 1.0], [0.1, 1.0]]
 
         self.g = GaussianGenerator(
             None, None, 100, 10,
-            special_grid_limits,
+            special_param_limits,
             grid_override=np.linspace(-10, 10, 1000, endpoint=True),
             normalize=True)
         if VERBOSE:
@@ -79,7 +84,7 @@ class TestGaussianGenerator:
 
 class TestGaussianTensor:
 
-    grid_limits = ([-0.5, 0.5], [0.1, 1.0], [0.1, 1.0])
+    param_limits = ([-0.5, 0.5], [0.1, 1.0], [0.1, 1.0])
 
     def __init__(self):
         self.N = 50000
@@ -93,7 +98,7 @@ class TestGaussianTensor:
         self.axes = [5, 10]
         self.t, __ = \
             gaussian_tensor(
-                self.x, self.axes, *TestGaussianTensor.grid_limits,
+                self.x, self.axes, *TestGaussianTensor.param_limits,
                 normalize=True)
         np.testing.assert_equal(self.t.shape[0], self.N)
         np.testing.assert_equal(self.t.shape[1], self.axes[0])
