@@ -27,6 +27,7 @@ def initialize_gaussian_from_GaussianGenerator(grid_limits=[-10, 10],
                           param_limits, normalize=normalize)
     if VERBOSE:
         g.print_info()
+    return g
 
 
 class Test_single_gaussian_from_params:
@@ -64,12 +65,12 @@ class TestGaussianGenerator:
         except RuntimeError:
             pass
 
-        special_param_limits = [[-4, 4], [0.01, 1.0], [0.1, 1.0]]
+        special_param_limits = [[-2, 2], [0.01, 1.0], [0.1, 1.0]]
 
         self.g = GaussianGenerator(
             None, None, 100, 10,
             special_param_limits,
-            grid_override=np.linspace(-10, 10, 1000, endpoint=True),
+            grid_override=np.linspace(-10, 10, 100000, endpoint=True),
             normalize=True)
         if VERBOSE:
             self.g.print_info()
