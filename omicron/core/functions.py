@@ -34,6 +34,17 @@ def gaussian(x, m, s, a=None):
     return a * np.exp(-(x - m)**2 / 2.0 / s**2)
 
 
+def single_normalized_gaussian_from_params(x, m, s):
+    """Gaussian function 1 / sqrt(2 * pi) / s * exp(-(x - m)**2 / 2 / s**2)"""
+
+    n = len(x)
+    x = x.reshape(n, 1)
+    m = m.reshape(1, *m.shape)
+    s = s.reshape(1, *m.shape)
+
+    return np.sum(gaussian(x, m, s), axis=-1)
+
+
 def gaussian_tensor(x, axes, m, s, a, normalize=True):
     """Generally a 3-tensor where the axes represent the following: axis 1 is
     the x-axis grid, axis 2 is the number of total functions (i.e. training
@@ -62,7 +73,8 @@ def gaussian_tensor(x, axes, m, s, a, normalize=True):
     Returns
     -------
     Matrix of shape len(x) x axes[0] in which the third axis was summed over
-    and normalized, if desired.
+    and normalized, if desired. Also returns the tensor containing either all
+    of the means, stds and amps.
     """
 
     np.testing.assert_equal(len(axes), 2)
@@ -81,8 +93,9 @@ def gaussian_tensor(x, axes, m, s, a, normalize=True):
 
     if normalize:
         _mat = _mat / np.sqrt(2.0 * np.pi) / amp / std / axes[-1]
+        amp = 1.0 / np.sqrt(2.0 * np.pi) / std / axes[-1]
 
-    return np.sum(_mat, axis=-1)
+    return np.sum(_mat, axis=-1), np.concatenate([mean, std, amp])
 
 
 def lorentzian(x, m, s, a=None):

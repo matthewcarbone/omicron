@@ -6,11 +6,54 @@ __email__ = "x94carbone@gmail.com"
 __status__ = "Prototype"
 
 import numpy as np
+import matplotlib.pyplot as plt
 
 from omicron.core.functions import gaussian, lorentzian, gaussian_tensor
+from omicron.core.core import GaussianGenerator
+
+
+class TestGaussianGenerator:
+
+    grid_limits = [[-0.5, 0.5], [0.1, 1.0], [0.1, 1.0]]
+
+    def __init__(self, plot=False):
+        self.g = GaussianGenerator(
+            [-10, 10], 1000, 100, 10,
+            TestGaussianGenerator.grid_limits, normalize=True)
+        self.g.print_info()
+        self.g = GaussianGenerator(
+            [-10, 10], 1000, 100, 10,
+            TestGaussianGenerator.grid_limits, normalize=False)
+        self.g.print_info()
+
+        try:
+            self.g = GaussianGenerator(
+                None, 1000, 100, 10,
+                TestGaussianGenerator.grid_limits, grid_override=None,
+                normalize=False)
+        except RuntimeError:
+            pass
+
+        special_grid_limits = [[-4, 4], [0.01, 1.0], [0.1, 1.0]]
+
+        self.g = GaussianGenerator(
+            None, None, 100, 10,
+            special_grid_limits,
+            grid_override=np.linspace(-10, 10, 1000, endpoint=True),
+            normalize=True)
+        self.g.print_info()
+
+        rg = self.g.get_random_gaussian()
+        if plot:
+            plt.plot(self.g.grid, rg[0], 'k')
+            plt.savefig("test.pdf", dpi=300, bbox_inches='tight')
+        dx = self.g.grid[1] - self.g.grid[0]
+        np.testing.assert_almost_equal(np.sum(rg[0] * dx), 1.0)
 
 
 class TestGaussianTensor:
+
+    grid_limits = ([-0.5, 0.5], [0.1, 1.0], [0.1, 1.0])
 
     def __init__(self):
         self.N = 50000
@@ -22,8 +65,10 @@ class TestGaussianTensor:
 
     def run(self):
         self.axes = [5, 10]
-        self.t = gaussian_tensor(self.x, self.axes, [-0.5, 0.5], [0.1, 1.0],
-                                 [0.1, 1.0], normalize=True)
+        self.t, __ = \
+            gaussian_tensor(
+                self.x, self.axes, *TestGaussianTensor.grid_limits,
+                normalize=True)
         np.testing.assert_equal(self.t.shape[0], self.N)
         np.testing.assert_equal(self.t.shape[1], self.axes[0])
 
