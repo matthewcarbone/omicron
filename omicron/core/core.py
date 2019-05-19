@@ -92,8 +92,6 @@ class GaussianGenerator:
         self.stats['normalized'] = normalized
 
     def print_info(self):
-        print("\nGaussian Generator class (Normalized=%a)"
-              % self.stats['normalized'])
         print(self.date_tag)
         print("---------------------------------------")
         print("* g tensor shape             %s" % (self.gtensor.shape,))
