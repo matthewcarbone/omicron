@@ -59,6 +59,8 @@ class GaussianGenerator:
         else:
             self.grid = grid_override
 
+        raise ValueError
+
         self.gtensor, self.g_params = gaussian_tensor(
             self.grid, [m_samples, gaussians_per_sample], *limits,
             normalize=normalize)
